@@ -72,13 +72,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 // Update existing student
                 if (!empty($password)) {
                     // Update with new password
-                    $hashed_password = password_hash($password, PASSWORD_DEFAULT);
                     $stmt = $conn->prepare("
                         UPDATE students 
                         SET student_number = ?, name = ?, email = ?, class = ?, password = ?
                         WHERE id = ?
                     ");
-                    $stmt->bind_param("sssssi", $student_number, $name, $email, $class, $hashed_password, $id);
+                    $stmt->bind_param("sssssi", $student_number, $name, $email, $class, $password, $id);
                 } else {
                     // Update without changing password
                     $stmt = $conn->prepare("
@@ -96,12 +95,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 }
             } else {
                 // Create new student
-                $hashed_password = password_hash($password, PASSWORD_DEFAULT);
                 $stmt = $conn->prepare("
                     INSERT INTO students (student_number, name, email, class, password)
                     VALUES (?, ?, ?, ?, ?)
                 ");
-                $stmt->bind_param("sssss", $student_number, $name, $email, $class, $hashed_password);
+                $stmt->bind_param("sssss", $student_number, $name, $email, $class, $password);
                 
                 if ($stmt->execute()) {
                     header("Location: students.php?success=record_created");

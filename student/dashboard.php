@@ -8,10 +8,10 @@ requireStudent();
 // Get student's records
 $records = [];
 $stmt = $conn->prepare("
-    SELECT i.*, is.punishment, is.details
-    FROM incident_students is
-    JOIN incidents i ON is.incident_id = i.id
-    WHERE is.student_id = ?
+    SELECT i.*, ist.punishment, ist.details
+    FROM incident_students ist
+    JOIN incidents i ON ist.incident_id = i.id
+    WHERE ist.student_id = ?
     ORDER BY i.date_reported DESC
 ");
 $stmt->bind_param("i", $_SESSION['user_id']);

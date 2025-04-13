@@ -35,10 +35,10 @@ $incident = $result->fetch_assoc();
 // Get students involved in this incident
 $students = [];
 $stmt = $conn->prepare("
-    SELECT s.*, is.punishment, is.details
-    FROM incident_students is
-    JOIN students s ON is.student_id = s.id
-    WHERE is.incident_id = ?
+SELECT s.*, incident_students_alias.punishment, incident_students_alias.details
+FROM incident_students incident_students_alias
+JOIN students s ON incident_students_alias.student_id = s.id
+WHERE incident_students_alias.incident_id = ?
 ");
 $stmt->bind_param("i", $incident_id);
 $stmt->execute();
